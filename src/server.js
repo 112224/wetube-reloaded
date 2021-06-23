@@ -33,6 +33,6 @@ app.get("/protected", handleProtected);
 app.get("/login", handleLogin);
 
 const handleListening = () =>
-  console.log(`Server listening on http://localhost:${PORT}`);
+  console.log(`Server listening on http://localhost:${PORT}!`);
 
 app.listen(PORT, handleListening);
