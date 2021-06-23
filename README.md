@@ -1,4 +1,5 @@
 # Wetube Reloaded
+## url structure
 
 / -> home
 /join -> Join
@@ -6,11 +7,12 @@
 /search -> Search
 
 
-/users/edit -> Edit Profile
-/users/delete -> Delete Profile
+/users/:id -> See Profile
+/users/logout -> Log Out
+/users/edit -> Edit My Profile
+/users/delete -> Delete My Profile
 
-/videos/watch -> Watch video
-/videos/edit -> Edit video
-/videos/delete -> Delete video
-/videos/comment -> Comment on a video
-/videos/commments/delete -> Delete A Comment of a video
+/videos/:id -> See video
+/videos/upload -> Upload video
+/videos/:id/edit -> Edit video
+/videos/:id/delete -> Delete video

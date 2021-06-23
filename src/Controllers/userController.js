@@ -7,3 +7,12 @@ export const edit = (req, res) => {
 export const deleteUser = (req, res) => {
     return res.send("delete");
 }
+export const login = (req, res) =>{
+    return res.send("login");
+}
+export const logout = (req, res) =>{
+    return res.send("logout");
+}
+export const see = (req, res) => {
+    return res.send("see");
+}
