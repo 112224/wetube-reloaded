@@ -1,5 +1,9 @@
-extends base.pug
-block head
-    title Edit | Wetube
+extends base
+
+
+
 block content
-    h1 Edit video!
+    h4 Change Title of video
+    form(method="POST")
+        input(name="title", placeholder="Video Title", value=video.title, required)
+        input(value="Save", type="submit")
