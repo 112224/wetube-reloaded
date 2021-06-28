@@ -57,7 +57,7 @@ export const postUpload = async (req, res) => {
   } catch {
     return res.render("upload", {
       pageTitle: "Upload Video",
-      //errorMessage: error._message,
+      errorMessage: error._message,
     });
   }
 };

@@ -14,7 +14,13 @@ const viedoSchema = new mongoose.Schema({
 viedoSchema.pre("save", async function () {
   this.hashtags = this.hashtags[0]
     .split(",")
-    .map((word) => (word.startsWtith("#") ? word : "#${word}"));
+    .map((word) => (word.startsWith("#") ? word : `#${word}`));
+  console.log("we want to watch", this);
+});
+viedoSchema.pre("update", async function () {
+  this.hashtags = this.hashtags[0]
+    .split(",")
+    .map((word) => (word.startsWith("#") ? word : `#${word}`));
   console.log("we want to watch", this);
 });
 
