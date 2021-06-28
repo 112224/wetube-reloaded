@@ -11,5 +11,12 @@ const viedoSchema = new mongoose.Schema({
   },
 });
 
+viedoSchema.pre("save", async function () {
+  this.hashtags = this.hashtags[0]
+    .split(",")
+    .map((word) => (word.startsWtith("#") ? word : "#${word}"));
+  console.log("we want to watch", this);
+});
+
 const Video = mongoose.model("Video", viedoSchema);
 export default Video;
