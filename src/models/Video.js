@@ -10,19 +10,9 @@ const viedoSchema = new mongoose.Schema({
     rating: { type: Number, default: 0, required: true },
   },
 });
-
-viedoSchema.pre("save", async function () {
-  this.hashtags = this.hashtags[0]
-    .split(",")
-    .map((word) => (word.startsWith("#") ? word : `#${word}`));
-  console.log("we want to watch", this);
-});
-viedoSchema.pre("update", async function () {
-  this.hashtags = this.hashtags[0]
-    .split(",")
-    .map((word) => (word.startsWith("#") ? word : `#${word}`));
-  console.log("we want to watch", this);
-});
+viedoSchema.static('formatHashtags', function (hashtags) {
+  return hashtags.split(",").map((word) => (word.startsWith("#") ? word : `#${word}`));
+})
 
 const Video = mongoose.model("Video", viedoSchema);
 export default Video;
