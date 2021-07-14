@@ -4,6 +4,7 @@ import rootRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
 import session from "express-session";
+import MongoStore from "connect-mongo";
 import { localMiddleware } from "./middlewares";
 const app = express();
 
@@ -17,14 +18,10 @@ app.use(
     secret: "Hello!",
     resave: true,
     saveUninitialized: true,
+    store: MongoStore.create({mongoUrl: "mongodb://127.0.0.1:27017/wetube"}),
     })
 );
-
-app.use(localMiddleware)
-app.get("/checkInfo",(req,res,next) =>{
-    req.session.potato += 1;
-    return res.send(`${req.session.id}+\n+${req.session.potato}`);
-});
+app.use(localMiddleware);
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
