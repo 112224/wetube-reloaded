@@ -91,12 +91,10 @@ export const finishGithubLogin = async (req, res) => {
       },
     })
   ).json();
-  console.log("tokenRequest :>> ", tokenRequest);
   if ("access_token" in tokenRequest) {
     // access api to github
     const { access_token } = tokenRequest;
     const apiUrl = "https://api.github.com";
-    console.log("access_token :>> ", access_token);
     const userData = await (
       await fetch(`${apiUrl}/user`, {
         headers: {
@@ -104,7 +102,6 @@ export const finishGithubLogin = async (req, res) => {
         },
       })
     ).json();
-    console.log("userData :>> ", userData);
     const emailData = await (
       await fetch(`${apiUrl}/user/emails`, {
         headers: {
@@ -115,13 +112,11 @@ export const finishGithubLogin = async (req, res) => {
     const emailObj = emailData.find(
       (email) => email.primary === true && email.verified === true
     );
-    console.log("emailData :>> ", emailData);
     if (!emailObj) {
       return res.redirect("/login");
     }
     // make login rules
     let user = await User.findOne({ email: emailObj.email });
-
     if (!user) {
       user = await User.create({
         name: userData.name ? userData.name : "Nothing",
