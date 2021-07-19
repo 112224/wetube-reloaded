@@ -141,14 +141,29 @@ export const getEdit = (req, res) => {
 };
 export const postEdit = async (req, res) => {
   const {
-    session: {
-      user: { _id },
-    },
+    session: { user = user },
     body: { name, email, username, location },
   } = req;
 
+  // error exception
+  if (user.email !== email || user.username !== username) {
+    const param = [];
+    if (user.email !== email) {
+      param.push({ email });
+    }
+    if (user.username !== username) {
+      param.push({ username });
+    }
+    const usernameExists = await User.exists({ $or: param });
+    if (usernameExists) {
+      return res.render("edit-profile", {
+        pageTitle: "Edit Profile",
+        errorMessage: "username or email is already used!",
+      });
+    }
+  }
   const updatedUser = await User.findByIdAndUpdate(
-    _id,
+    user._id,
     {
       name,
       email,
@@ -163,6 +178,38 @@ export const postEdit = async (req, res) => {
 };
 export const logout = async (req, res) => {
   req.session.destroy();
+  return res.redirect("/");
+};
+export const getChangePassword = (req, res) => {
+  if (req.session.user.socialOnly === true) {
+    return res.redirect("/");
+  }
+  return res.render("change-password", { pageTitle: "Change Password" });
+};
+export const postChangePassword = async (req, res) => {
+  const {
+    session: {
+      user: { _id, password },
+    },
+    body: { oldPassword, newPassword, newPassword1 },
+  } = req;
+  const ok = await bcrypt.compare(oldPassword, password);
+  if (!ok) {
+    return res.status(400).render("change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "the current password is incorrect",
+    });
+  }
+  if (newPassword !== newPassword1) {
+    return res.status(400).render("change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "the password does not match",
+    });
+  }
+  const user = await User.findById(_id);
+  user.password = newPassword;
+  await user.save();
+  req.session.user.password = user.password;
   return res.redirect("/");
 };
 export const see = (req, res) => {
