@@ -143,8 +143,8 @@ export const postEdit = async (req, res) => {
   const {
     session: { user = user },
     body: { name, email, username, location },
+    file,
   } = req;
-
   // error exception
   if (user.email !== email || user.username !== username) {
     const param = [];
@@ -165,6 +165,7 @@ export const postEdit = async (req, res) => {
   const updatedUser = await User.findByIdAndUpdate(
     user._id,
     {
+      avatarUrl: file ? file.path : user.avatarUrl,
       name,
       email,
       username,
