@@ -10,6 +10,7 @@ const viedoSchema = new mongoose.Schema({
     views: { type: Number, default: 0, required: true },
     rating: { type: Number, default: 0, required: true },
   },
+  owner: { type: mongoose.Schema.Types.ObjectId, requied: true, ref: "User" },
 });
 viedoSchema.static("formatHashtags", function (hashtags) {
   return hashtags
