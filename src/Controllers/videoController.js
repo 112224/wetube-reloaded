@@ -1,5 +1,4 @@
 import Video from "../models/Video";
-import User from "../models/User";
 export const homepageVideos = async (req, res) => {
   try {
     const videos = await Video.find({}).sort({ createdAt: "desc" });
@@ -11,9 +10,8 @@ export const homepageVideos = async (req, res) => {
 export const watch = async (req, res) => {
   const { id } = req.params;
   try {
-    const video = await Video.findById(id);
-    const owner = await User.findById(video.owner);
-    return res.render("watch", { pageTitle: video.title, video, owner });
+    const video = await Video.findById(id).populate("owner");
+    return res.render("watch", { pageTitle: video.title, video });
   } catch {
     return res.status(404).render("404", { pageTitle: "Video Not Found" });
   }
