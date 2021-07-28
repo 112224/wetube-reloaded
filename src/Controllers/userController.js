@@ -23,14 +23,16 @@ export const postJoin = async (req, res) => {
     });
   }
   try {
-    await User.create({
+    const user = await User.create({
       name,
       username,
       email,
       password,
       location,
     });
+    console.log("user :>> ", user);
   } catch (error) {
+    console.log("error._message :>> ", error);
     return res.status(400).render("join", {
       pageTitle: "Join",
       errorMessage: error._message,
