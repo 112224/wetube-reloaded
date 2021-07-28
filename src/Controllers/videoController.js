@@ -1,3 +1,4 @@
+import User from "../models/User";
 import Video from "../models/Video";
 export const homepageVideos = async (req, res) => {
   try {
@@ -53,13 +54,17 @@ export const postUpload = async (req, res) => {
     },
   } = req;
   try {
-    await Video.create({
+    const newVideo = await Video.create({
       title,
       description,
       fileUrl: file.path,
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
+
+    const user = await User.findById(_id);
+    user.videos.push(newVideo._id);
+    user.save();
     return res.redirect("/");
   } catch (error) {
     console.log("error :>> ", error);
@@ -87,6 +92,5 @@ export const searchVideo = async (req, res) => {
       },
     });
   }
-  console.log(videos);
   return res.render("search", { pageTitle: "Search", videos });
 };
