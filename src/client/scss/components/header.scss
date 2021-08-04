@@ -7,6 +7,7 @@ header {
     color: $red;
     font-size: 38px;
   }
+
   ul {
     display: flex;
     justify-content: space-between;
@@ -26,5 +27,10 @@ header {
     color: $bg;
     padding: 5px 10px;
     border-radius: 5px;
+  }
+  .header__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
   }
 }
