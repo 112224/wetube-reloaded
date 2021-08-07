@@ -2,15 +2,24 @@ extends base
 
 block content 
     video(src="/"+video.fileUrl, controls)
-    div
-        p=video.description
-        small=video.createdAt
-        br
-        small Uploaded by 
-            a(href=`/users/${video.owner._id}`) #{video.owner.name}
-        
-    if loggedIn
-        if String(video.owner._id) === String(loggedInUser._id)
-            a(href=`${video.id}/edit`) Edit Video &rarr;
+    div 
+        button#play Play 
+        button#mute Mute 
+        span#time 00:00/00:00
+        input(type="range", min="0",step="0.1", max="1")#volume
+    //-
+        div
+            p=video.description
+            small=video.createdAt
             br
-            a(href=`${video.id}/delete`) Delete Video &rarr;
+            small Uploaded by 
+                a(href=`/users/${video.owner._id}`) #{video.owner.name}
+            
+        if loggedIn
+            if String(video.owner._id) === String(loggedInUser._id)
+                a(href=`${video.id}/edit`) Edit Video &rarr;
+                br
+                a(href=`${video.id}/delete`) Delete Video &rarr;
+
+block scripts 
+    script(src="/static/js/videoPlayer.js") 
