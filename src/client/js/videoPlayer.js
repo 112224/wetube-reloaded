@@ -17,16 +17,18 @@ let controlsMovementTimeout = null;
 let volumeValue = 0.5;
 
 video.volume = volumeValue;
-const handlePlayClick = (e) => {
-  // if the vidoe is playing, pause
-
-  // when click the playBtn, this func called twice
+const playVideo = () => {
   if (video.paused) {
     video.play();
   } else {
     video.pause();
   }
   playBtnIcon.classList = video.paused ? "fas fa-play" : "fas fa-pause";
+};
+const handlePlayClick = (e) => {
+  // if the vidoe is playing, pause
+  // #1 when click the playBtn, this func called twice => Done
+  playVideo();
 };
 
 const handleMute = (e) => {
@@ -50,6 +52,10 @@ const handleVolumeChange = (event) => {
   }
   volumeValue = value;
   video.volume = value;
+  if (value == 0) {
+    video.muted = true;
+    muteBtnIcon.classList = "fas fa-volume-mute";
+  }
 };
 const formatTime = (seconds) =>
   new Date(seconds * 1000).toISOString().substr(14, 5);
@@ -66,7 +72,9 @@ const handleTimelineChange = (event) => {
   const {
     target: { value },
   } = event;
+  playVideo();
   video.currentTime = value;
+  playVideo();
 };
 const handleFullScreen = () => {
   const isFullScreen = document.fullscreenElement;
@@ -95,6 +103,11 @@ const handleMouseMove = () => {
 const handleMouseLeave = () => {
   controlsTimeout = setTimeout(hideControls, 3000);
 };
+const handleKeydown = (e) => {
+  if (e.keyCode === 32) {
+    playVideo();
+  }
+};
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMute);
 video.addEventListener("loadeddata", handleLoadedMetadata);
@@ -102,6 +115,8 @@ video.addEventListener("timeupdate", handleTimeUpdate);
 volumeRange.addEventListener("input", handleVolumeChange);
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
-videoContainer.addEventListener("click", handlePlayClick);
+// for #1 resolve videoContainer => video
+video.addEventListener("click", handlePlayClick);
 timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullScreen);
+window.addEventListener("keydown", handleKeydown);
