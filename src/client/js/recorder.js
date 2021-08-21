@@ -9,12 +9,18 @@ let videoFile = null;
 
 const handleStop = () => {
   startBtn.innerText = "Start Recording";
+
   downloadBtn.disabled = false;
   downloadBtn.hidden = false;
-
   startBtn.removeEventListener("click", handleStop);
   startBtn.addEventListener("click", handleStart);
   recorder.stop();
+
+  const tracks = stream.getTracks();
+  tracks.forEach((track) => {
+    track.stop();
+  });
+  stream = null;
   clearTimeout(recorderTimeOut);
 };
 const handleStart = () => {
