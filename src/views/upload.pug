@@ -4,7 +4,7 @@ block content
     div 
         video#preview
         button#startBtn Start Recording
-        button(hidden=true, disabled, id="downloadBtn") Download Recording  
+        button(disabled, hidden=true, id="downloadBtn") Download Record
     if errorMessage 
         span=errorMesaage
     form(method="POST", enctype="multipart/form-data")

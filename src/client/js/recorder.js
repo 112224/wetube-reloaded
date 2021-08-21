@@ -7,13 +7,34 @@ let recorder = null;
 let recorderTimeOut = null;
 let videoFile = null;
 
-const handleStop = () => {
-  startBtn.innerText = "Start Recording";
+const init = async () => {
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: true,
+    });
+    recorder = new MediaRecorder(stream);
+    recorder.ondataavailable = (event) => {
+      videoFile = URL.createObjectURL(event.data);
+      preview.src = videoFile;
+      preview.loop = true;
+      preview.play();
+    };
+    recorder.start();
+    recorderTimeOut = setTimeout(handleStop, 10000);
+  } catch {
+    console.log("error :>> ", error);
+  }
+};
 
+const handleStop = () => {
   downloadBtn.disabled = false;
   downloadBtn.hidden = false;
+  downloadBtn.addEventListener("click", handleDownload);
+
+  startBtn.innerText = "Start Recording";
   startBtn.removeEventListener("click", handleStop);
-  startBtn.addEventListener("click", handleStart);
+  startBtn.addEventListener("click", handleRestart);
   recorder.stop();
 
   const tracks = stream.getTracks();
@@ -27,15 +48,10 @@ const handleStart = () => {
   startBtn.innerText = "Stop Recording";
   startBtn.removeEventListener("click", handleStart);
   startBtn.addEventListener("click", handleStop);
-
-  recorder = new MediaRecorder(stream);
-  recorder.ondataavailable = (event) => {
-    videoFile = URL.createObjectURL(event.data);
-    preview.src = videoFile;
-    preview.play();
-  };
-  recorder.start();
-  recorderTimeOut = setTimeout(handleStop, 10000);
+  init();
+};
+const handleRestart = () => {
+  window.location.href = "/videos/upload";
 };
 const handleDownload = () => {
   const a = document.createElement("a");
@@ -43,14 +59,8 @@ const handleDownload = () => {
   a.download = "MyRecording.webm";
   document.body.appendChild(a);
   a.click();
+  a.remove();
+  window.location.href = "/videos/upload";
 };
-const init = async () => {
-  stream = await navigator.mediaDevices.getUserMedia({
-    audio: false,
-    video: true,
-  });
-};
-init();
 
 startBtn.addEventListener("click", handleStart);
-downloadBtn.addEventListener("cilck", handleDownload);
