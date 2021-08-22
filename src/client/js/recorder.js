@@ -61,9 +61,13 @@ const handleDownload = async () => {
   ffmpeg.FS("writeFile", "recording.webm", await fetchFile(videoFile));
 
   await ffmpeg.run("-i", "recording.webm", "-r", "60", "output.mp4");
+  const mp4file = ffmpeg.FS("readFile", "output.mp4");
+  const mp4blob = new Blob([mp4file.buffer], { type: "video/mp4" });
+  const mp4Url = URL.createObjectURL(mp4blob);
+
   const a = document.createElement("a");
-  a.href = videoFile;
-  a.download = "MyRecording.webm";
+  a.href = mp4Url;
+  a.download = "MyRecording.mp4";
   document.body.appendChild(a);
   a.click();
   a.remove();
