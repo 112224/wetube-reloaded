@@ -93,6 +93,14 @@ const handleDownload = async () => {
   thumb.click();
   thumb.remove();
 
+  ffmpeg.FS("unlink", "recording.webm");
+  ffmpeg.FS("unlink", "output.mp4");
+  ffmpeg.FS("unlink", "thumbnail.jpg");
+
+  URL.revokeObjectURL(mp4Url);
+  URL.revokeObjectURL(thumbUrl);
+  URL.revokeObjectURL(videoFile);
+
   //window.location.href = "/videos/upload";
 };
 
