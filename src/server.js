@@ -1,5 +1,6 @@
 import express from "express";
 import morgan from "morgan";
+import flash from "express-flash";
 import rootRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
@@ -7,9 +8,10 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import { localMiddleware } from "./middlewares";
 import apiRouter from "./routers/apiRouter";
-const app = express();
 
+const app = express();
 const logger = morgan("dev");
+
 app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 app.use((req, res, next) => {
@@ -17,6 +19,7 @@ app.use((req, res, next) => {
   res.header("Cross-Origin-Opener-Policy", "same-origin");
   next();
 });
+
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -27,6 +30,7 @@ app.use(
     store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
   })
 );
+app.use(flash());
 app.use(localMiddleware);
 app.use("/", rootRouter);
 app.use("/uploads", express.static("uploads"));
