@@ -29,15 +29,13 @@ export const postJoin = async (req, res) => {
       password,
       location,
     });
-    console.log("user :>> ", user);
   } catch (error) {
-    console.log("error._message :>> ", error);
     return res.status(400).render("join", {
       pageTitle: "Join",
       errorMessage: error._message,
     });
   }
-
+  req.flash("error", "Not authorized");
   return res.redirect("/login");
 };
 export const getLogin = (req, res) => {
@@ -181,7 +179,7 @@ export const postEdit = async (req, res) => {
 };
 export const logout = async (req, res) => {
   req.session.destroy();
-  req.flash("info", "Good Bye!");
+  //req.flash("info", "Good Bye!");
   return res.redirect("/");
 };
 export const getChangePassword = (req, res) => {
