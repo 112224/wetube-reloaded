@@ -19,7 +19,6 @@ block content
             div 
                 span#fullScreen
                     i.fas.fa-expand
-    //-
         div
             p=video.description
             small=video.createdAt
@@ -32,6 +31,12 @@ block content
                 a(href=`${video.id}/edit`) Edit Video &rarr;
                 br
                 a(href=`${video.id}/delete`) Delete Video &rarr;
+    if loggedIn
+        div.video__comments 
+            form.video_comment-form#commentForm
+                textarea(cols="100", rows="2", placeholder="Write a Comment")
+                button(type="submit") Add Comment 
 
 block scripts 
-    script(src="/static/js/videoPlayer.js") 
+    script(src="/static/js/videoPlayer.js")
+    script(src="/static/js/commentSection.js") 
