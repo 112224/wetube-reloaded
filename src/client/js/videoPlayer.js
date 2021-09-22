@@ -106,6 +106,10 @@ const handleMouseLeave = () => {
   controlsTimeout = setTimeout(hideControls, 3000);
 };
 const handleKeydown = (e) => {
+  const form = document.getElementById("commentForm");
+  if (e.target.tagName === "TEXTAREA") {
+    return;
+  }
   if (e.keyCode === 32) {
     playVideo();
   }
@@ -129,4 +133,4 @@ video.addEventListener("click", handlePlayClick);
 video.addEventListener("ended", handleEnded);
 timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullScreen);
-window.addEventListener("keydown", handleKeydown);
+document.addEventListener("keydown", handleKeydown);
